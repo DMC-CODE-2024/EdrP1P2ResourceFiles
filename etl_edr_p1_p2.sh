@@ -1,13 +1,12 @@
 #!/bin/bash
 
-set -x
+#set -x
 
 module_name="etl_edr_p1_p2"
 main_module="etl_edr" #keep it empty "" if there is no main module 
 log_level="INFO" # INFO, DEBUG, ERROR
 
 ########### DO NOT CHANGE ANY CODE OR TEXT AFTER THIS LINE #########
-
 op_name=$1
 
 build_path="${APP_HOME}/${main_module}_module/${module_name}"
@@ -16,8 +15,6 @@ build="${module_name}.jar"
 cd ${build_path}
 
 source application.properties > /dev/null
-
-
 start_java_process()
 {
   op_name=$1 
@@ -94,9 +91,9 @@ for j in ${source_list//,/ }
 do
   source_name=$j
 
-  mkdir $p1_output_path/${source_name}/output -p
+  mkdir $p1_output_path/${source_name}/ -p
 
-  f_count=`ls -tr ${p1_output_path}/${source_name}/output | wc -l`
+  f_count=`ls -tr ${p1_output_path}/${source_name} | wc -l`
 
   if [ ${f_count} == 0 ]
   then
@@ -107,9 +104,9 @@ do
 
     mkdir $p2_input_path -p
 
-    echo "$(date) ${module_name} [${op_name}]-[${source_name}]: start moving P1 output file = ${f_count} from ${p1_output_path}/${source_name}/output/* to $p2_input_path"
+    echo "$(date) ${module_name} [${op_name}]-[${source_name}]: start moving P1 output file = ${f_count} from ${p1_output_path}/${source_name}/* to $p2_input_path"
 
-    mv ${p1_output_path}/${source_name}/output/* ${p2_input_path}
+    mv ${p1_output_path}/${source_name}/* ${p2_input_path}
 
     echo "$(date) ${module_name} [${op_name}]-[${source_name}]: P1 output file = ${f_count} sucessfully moved to ${p2_input_path}"
 
@@ -143,7 +140,7 @@ echo "$(date) ${module_name} [${op_name}]-[${all_folder}]: P2 java process is co
 
 ## moving P2 splited file to P3 input path 
 
-p2_output_path="${OUTPUTPATH}/${op_name}/${all_folder}/output"
+p2_output_path="${OUTPUTPATH}/${op_name}/${all_folder}/"
 p3_input_path="${DATA_HOME}/${main_module}_module/${main_module}_p3/input/${op_name}"
 
 mkdir $p2_output_path -p
